@@ -4,9 +4,11 @@ const express = require("express");
 const app = express();
 
 const connectDB = require("./db/connect.js");
+const authenticateUser = require('./middleware/authentication.js')
 
-const authRouther = require("./routes/auth.js");
-const jobsRouther = require("./routes/jobs.js");
+
+const authRouter = require("./routes/auth.js");
+const jobsRouter = require("./routes/jobs.js");
 
 // error handler
 const notFoundMiddleware = require("./middleware/not-found");
@@ -16,8 +18,8 @@ app.use(express.json());
 // extra packages
 
 // routes
-app.use("/api/v1/auth", authRouther);
-app.use("api/v1/jobs", jobsRouther);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/jobs", authenticateUser, jobsRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
